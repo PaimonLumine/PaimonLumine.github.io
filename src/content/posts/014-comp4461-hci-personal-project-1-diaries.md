@@ -8,6 +8,7 @@ labels: ["COMP4461"]
 milestone: "学习"
 isSingleton: false
 draft: false
+cover: "https://raw.githubusercontent.com/PaimonLumine/blog/master/2023/Project%201%201a8b160cc53041ebad40d3217606ccf7/PPT1.png"
 ---
 # Project 1
 

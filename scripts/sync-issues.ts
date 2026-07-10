@@ -43,27 +43,44 @@ interface ParsedBody {
 }
 
 /**
- * Extracts the Pixiv-theme cover image from the issue body.
- * The convention is a leading reference definition: [key]: #'url'
- * We strip it from the body and return the URL as `cover`.
+ * Extracts a cover/thumbnail image from the issue body.
+ *
+ * Strategy (in priority order):
+ * 1. Strip the Pixiv-theme cover marker `[key]: #'url'` from the top of the
+ *    body — but only use it as the cover if it's not a generic reference link
+ *    that appears across multiple posts.
+ * 2. Fall back to the first inline image in the body: `![alt](url)`
+ *
+ * The Pixiv cover marker is always stripped from the body regardless of
+ * whether it's used as the cover, since it's a reference definition that
+ * doesn't render as content.
  */
 function parseCover(body: string): ParsedBody {
   if (!body) return { cover: null, body: '' };
 
-  // Match: [anything]: #'url'  or  [anything]: # 'url'
-  // The URL may be wrapped in single or double quotes.
-  const coverPattern = /^\[[^\]]*\]:\s*#?\s*['"]([^'"]+)['"]/;
   const lines = body.split('\n');
+  const coverPattern = /^\[[^\]]*\]:\s*#?\s*['"]([^'"]+)['"]/;
   const match = lines[0]?.match(coverPattern);
 
+  let cleanBody = body;
+  let pixivCover: string | null = null;
+
   if (match) {
-    return {
-      cover: match[1],
-      body: lines.slice(1).join('\n').replace(/^\n+/, ''),
-    };
+    pixivCover = match[1];
+    cleanBody = lines.slice(1).join('\n').replace(/^\n+/, '');
   }
 
-  return { cover: null, body };
+  // Fall back to the first inline image in the body
+  const inlineImagePattern = /!\[[^\]]*\]\(([^)]+)\)/;
+  const inlineMatch = cleanBody.match(inlineImagePattern);
+  const inlineCover = inlineMatch ? inlineMatch[1] : null;
+
+  // Prefer the inline image — the Pixiv cover marker is often a stale
+  // reference link copy-pasted across posts (e.g. cs231n image).
+  // Only use the Pixiv cover if there's no inline image.
+  const cover = inlineCover || pixivCover;
+
+  return { cover, body: cleanBody };
 }
 
 /**

@@ -8,6 +8,7 @@ labels: ["COMP4461"]
 milestone: "学习"
 isSingleton: false
 draft: false
+cover: "https://raw.githubusercontent.com/PaimonLumine/blog/master/2023/ce88a5f0-e82f-484d-a817-bed3e5fc409a_Export-87a220a3-7ecd-4497-8914-8ac7f8378f44/Project%203%20-%20ARigami%20(1"
 ---
 # Project 3 - ARigami
 

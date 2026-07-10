@@ -8,6 +8,7 @@ labels: ["COMP4461"]
 milestone: "学习"
 isSingleton: false
 draft: false
+cover: "https://raw.githubusercontent.com/PaimonLumine/blog/master/2023/Project%202%20-%20DoSS%208425162040644435b56f60e07a33028d/Dangerous_of_drowsiness_driving.png"
 ---
 # Project 2 - DoSS
 
