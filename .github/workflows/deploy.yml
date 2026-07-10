@@ -5,7 +5,6 @@ on:
     branches: [master]
   workflow_dispatch:
 
-# Allow this job to clone the repo, create a page deployment, and sync content
 permissions:
   contents: read
   pages: write
@@ -15,18 +14,31 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout your repository using git
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install, build, and upload your site
-        uses: withastro/action@v3
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          package-manager: pnpm
           node-version: 22
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Build
+        run: pnpm build
         env:
-          # GITHUB_TOKEN is automatically provided by GitHub Actions.
-          # Used by scripts/sync-issues.ts to fetch blog content from Issues API.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
 
   deploy:
     needs: build
