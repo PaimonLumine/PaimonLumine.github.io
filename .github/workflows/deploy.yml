@@ -22,10 +22,10 @@ jobs:
         uses: withastro/action@v3
         with:
           package-manager: pnpm
+        env:
           # GITHUB_TOKEN is automatically provided by GitHub Actions.
           # Used by scripts/sync-issues.ts to fetch blog content from Issues API.
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy:
     needs: build
