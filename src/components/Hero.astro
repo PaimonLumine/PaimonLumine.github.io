@@ -1,0 +1,20 @@
+---
+import PoetryTyping from './PoetryTyping.tsx';
+import WeatherWidget from './WeatherWidget.tsx';
+import { siteConfig } from '../site.config';
+---
+
+<section class="relative flex min-h-[60vh] flex-col items-center justify-center px-4 py-16 text-center">
+  <h1 class="font-[var(--font-title)] text-5xl text-[var(--color-paper)] md:text-7xl">
+    {siteConfig.title}
+  </h1>
+  <p class="mt-4 text-lg text-[var(--color-paper-dim)] md:text-xl">
+    {siteConfig.subtitle}
+  </p>
+  <div class="mt-8 min-h-[3rem] max-w-2xl text-base text-[var(--color-accent)] md:text-lg">
+    <PoetryTyping client:load />
+  </div>
+  <div class="absolute right-4 top-4 hidden md:block">
+    <WeatherWidget client:load />
+  </div>
+</section>

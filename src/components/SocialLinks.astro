@@ -1,0 +1,24 @@
+---
+import { siteConfig } from '../site.config';
+
+const links = [
+  { label: 'GitHub', href: siteConfig.social.github, icon: 'github' },
+  { label: 'Email', href: siteConfig.social.email, icon: 'mail' },
+  { label: 'Music', href: siteConfig.social.music, icon: 'music' },
+];
+---
+
+<div class="flex items-center gap-4">
+  {links.map((link) => (
+    <a
+      href={link.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="text-[var(--color-paper-dim)] transition-colors hover:text-[var(--color-accent)]"
+      aria-label={link.label}
+      title={link.label}
+    >
+      {link.label}
+    </a>
+  ))}
+</div>

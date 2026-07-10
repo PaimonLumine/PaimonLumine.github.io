@@ -1,0 +1,44 @@
+---
+import { formatDate } from '../utils/date';
+
+interface Props {
+  title: string;
+  number: number;
+  date: Date;
+  labels: string[];
+  cover?: string;
+}
+
+const { title, number, date, labels, cover } = Astro.props;
+---
+
+<article class="reveal">
+  <a
+    href={`/post/${number}`}
+    class="group block overflow-hidden rounded-lg border border-[var(--color-border)] bg-[rgba(22,33,62,0.5)] backdrop-blur-sm transition-all hover:border-[var(--color-accent)] hover:bg-[rgba(22,33,62,0.7)]"
+  >
+    {cover && (
+      <div class="aspect-[16/9] overflow-hidden">
+        <img
+          src={cover}
+          alt={title}
+          loading="lazy"
+          class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+      </div>
+    )}
+    <div class="p-5">
+      <h3 class="font-[var(--font-title)] text-xl text-[var(--color-paper)] transition-colors group-hover:text-[var(--color-accent)]">
+        {title}
+      </h3>
+      <div class="mt-2 flex flex-wrap items-center gap-3 text-sm text-[var(--color-paper-dim)]">
+        <time datetime={date.toISOString()}>{formatDate(date)}</time>
+        {labels.map((label) => (
+          <span class="rounded-full bg-[rgba(95,145,255,0.1)] px-2 py-0.5 text-xs text-[var(--color-accent)]">
+            {label}
+          </span>
+        ))}
+      </div>
+    </div>
+  </a>
+</article>

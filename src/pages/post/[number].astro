@@ -1,0 +1,83 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Giscus from '../../components/Giscus.astro';
+import { formatDate } from '../../utils/date';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({
+    params: { number: String(post.data.number) },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+// Find prev/next posts by issue number
+const allPosts = (await getCollection('posts')).sort(
+  (a, b) => a.data.number - b.data.number
+);
+const currentIndex = allPosts.findIndex((p) => p.data.number === post.data.number);
+const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
+const nextPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.title}
+  cover={post.data.cover}
+  ogImage={`/open-graph/${post.data.number}.png`}
+>
+  <article class="mx-auto max-w-3xl px-4 py-8">
+    <!-- Post header -->
+    <header class="mb-8 border-b border-[var(--color-border)] pb-6">
+      <h1 class="font-[var(--font-title)] text-3xl text-[var(--color-paper)] md:text-4xl">
+        {post.data.title}
+      </h1>
+      <div class="mt-3 flex flex-wrap items-center gap-3 text-sm text-[var(--color-paper-dim)]">
+        <time datetime={post.data.date.toISOString()}>
+          {formatDate(post.data.date)}
+        </time>
+        {post.data.labels.map((label) => (
+          <span class="rounded-full bg-[rgba(95,145,255,0.1)] px-2 py-0.5 text-xs text-[var(--color-accent)]">
+            {label}
+          </span>
+        ))}
+      </div>
+    </header>
+
+    {post.data.cover && (
+      <img
+        src={post.data.cover}
+        alt={post.data.title}
+        class="mb-8 w-full rounded-lg"
+      />
+    )}
+
+    <!-- Post body -->
+    <div class="prose">
+      <Content />
+    </div>
+
+    <!-- Prev/Next navigation -->
+    <nav class="mt-12 flex justify-between border-t border-[var(--color-border)] pt-6">
+      {prevPost ? (
+        <a href={`/post/${prevPost.data.number}`} class="text-sm text-[var(--color-paper-dim)] hover:text-[var(--color-accent)]">
+          ← {prevPost.data.title}
+        </a>
+      ) : <span />}
+      {nextPost ? (
+        <a href={`/post/${nextPost.data.number}`} class="text-right text-sm text-[var(--color-paper-dim)] hover:text-[var(--color-accent)]">
+          {nextPost.data.title} →
+        </a>
+      ) : <span />}
+    </nav>
+
+    <!-- Comments -->
+    <section class="mt-12">
+      <Giscus />
+    </section>
+  </article>
+</BaseLayout>

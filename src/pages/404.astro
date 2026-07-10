@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../site.config';
+---
+
+<BaseLayout title="404">
+  <div class="flex min-h-[50vh] flex-col items-center justify-center text-center">
+    <h1 class="font-[var(--font-title)] text-6xl text-[var(--color-paper)]">404</h1>
+    <p class="mt-4 text-[var(--color-paper-dim)]">此頁面不存在</p>
+    <a href="/" class="mt-8 text-[var(--color-accent)] hover:text-[var(--color-accent-light)]">
+      返回首頁
+    </a>
+  </div>
+</BaseLayout>

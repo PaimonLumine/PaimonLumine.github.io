@@ -1,0 +1,80 @@
+---
+import { siteConfig } from '../site.config';
+
+const navItems = [
+  { label: '首頁', href: '/' },
+  { label: '關於', href: '/about' },
+  { label: '項目', href: '/project' },
+  { label: '書單', href: '/book' },
+  { label: '友鄰', href: '/friend' },
+];
+
+const pathname = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? pathname === '/' : pathname.startsWith(href);
+---
+
+<header class="relative z-20 border-b border-[var(--color-border)] backdrop-blur-md bg-[rgba(15,15,26,0.6)]">
+  <nav class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 md:px-8">
+    <a href="/" class="font-[var(--font-title)] text-xl text-[var(--color-paper)] hover:text-[var(--color-accent)] transition-colors">
+      {siteConfig.title}
+    </a>
+
+    <!-- Desktop nav -->
+    <ul class="hidden items-center gap-6 md:flex">
+      {navItems.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            class:list={[
+              'text-sm transition-colors hover:text-[var(--color-accent)]',
+              isActive(item.href) ? 'text-[var(--color-accent)]' : 'text-[var(--color-paper-dim)]',
+            ]}
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Mobile nav toggle -->
+    <button
+      id="nav-toggle"
+      class="flex flex-col gap-1.5 md:hidden"
+      aria-label="Toggle navigation"
+      aria-expanded="false"
+    >
+      <span class="block h-0.5 w-5 bg-[var(--color-paper)] transition-all"></span>
+      <span class="block h-0.5 w-5 bg-[var(--color-paper)] transition-all"></span>
+      <span class="block h-0.5 w-5 bg-[var(--color-paper)] transition-all"></span>
+    </button>
+  </nav>
+
+  <!-- Mobile nav menu -->
+  <ul id="mobile-nav" class="hidden flex-col gap-2 px-4 pb-4 md:hidden">
+    {navItems.map((item) => (
+      <li>
+        <a
+          href={item.href}
+          class:list={[
+            'block py-2 text-sm transition-colors',
+            isActive(item.href) ? 'text-[var(--color-accent)]' : 'text-[var(--color-paper-dim)]',
+          ]}
+        >
+          {item.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</header>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const mobileNav = document.getElementById('mobile-nav');
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = mobileNav?.classList.toggle('flex');
+    mobileNav?.classList.toggle('hidden', !isOpen);
+    toggle.setAttribute('aria-expanded', String(!!isOpen));
+  });
+</script>

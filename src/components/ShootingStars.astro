@@ -1,0 +1,15 @@
+---
+// Decorative shooting stars — pure CSS, no JavaScript.
+// Renders 6 star elements at random positions with staggered delays.
+---
+
+<div class="fixed inset-0 z-0 overflow-hidden pointer-events-none" aria-hidden="true">
+  {
+    Array.from({ length: 6 }).map((_, i) => (
+      <div
+        class="shooting-star"
+        style={`top: ${5 + i * 12}%; right: ${10 + i * 15}%; animation-delay: ${i * 1.2}s;`}
+      />
+    ))
+  }
+</div>

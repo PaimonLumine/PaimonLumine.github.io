@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import PostCard from '../components/PostCard.astro';
+
+// Fetch all posts, filter out singleton pages (About/Book/Friend/Project),
+// sort by date descending.
+const allPosts = (await getCollection('posts'))
+  .filter((post) => !post.data.isSingleton)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<BaseLayout>
+  <Hero />
+
+  <section class="mx-auto max-w-5xl px-4 py-12">
+    <h2 class="mb-8 font-[var(--font-title)] text-2xl text-[var(--color-paper)]">
+      文章
+    </h2>
+    <div class="grid gap-6 md:grid-cols-2">
+      {allPosts.map((post) => (
+        <PostCard
+          title={post.data.title}
+          number={post.data.number}
+          date={post.data.date}
+          labels={post.data.labels}
+          cover={post.data.cover}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

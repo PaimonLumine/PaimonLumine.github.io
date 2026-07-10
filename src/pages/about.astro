@@ -1,0 +1,27 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Find the About post (label "About")
+const posts = await getCollection('posts');
+const aboutPost = posts.find((p) => p.data.labels.includes('About'));
+
+let Content = null;
+if (aboutPost) {
+  const rendered = await render(aboutPost);
+  Content = rendered.Content;
+}
+---
+
+<BaseLayout title="關於" description="關於">
+  <article class="mx-auto max-w-3xl px-4 py-8">
+    <h1 class="mb-8 font-[var(--font-title)] text-3xl text-[var(--color-paper)]">關於</h1>
+    {Content ? (
+      <div class="prose">
+        <Content />
+      </div>
+    ) : (
+      <p class="text-[var(--color-paper-dim)]">No content yet.</p>
+    )}
+  </article>
+</BaseLayout>

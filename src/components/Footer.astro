@@ -1,0 +1,18 @@
+---
+import SocialLinks from './SocialLinks.astro';
+import { siteConfig } from '../site.config';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="relative z-10 border-t border-[var(--color-border)] px-4 py-8 md:px-8">
+  <div class="mx-auto flex max-w-5xl flex-col items-center gap-4">
+    <SocialLinks />
+    <p class="text-sm text-[var(--color-paper-dim)]">
+      © {year} {siteConfig.author} · {siteConfig.subtitle}
+    </p>
+    <p class="text-xs text-[var(--color-paper-dim)]">
+      Built with <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a> · Hosted on GitHub Pages
+    </p>
+  </div>
+</footer>

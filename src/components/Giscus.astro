@@ -1,0 +1,37 @@
+---
+import { siteConfig } from '../site.config';
+
+// Giscus comments — powered by GitHub Discussions.
+// Requires manual setup:
+// 1. Enable Discussions on PaimonLumine/blog (or a dedicated comment repo)
+// 2. Install the giscus app: https://github.com/apps/giscus
+// 3. Create an "Announcements" discussion category
+// 4. Get data-repo-id and data-category-id from https://giscus.app
+// 5. Fill in siteConfig.giscus.repoId and categoryId
+
+const { repo, repoId, category, categoryId, mapping, reactionsEnabled, inputPosition, theme, lang } = siteConfig.giscus;
+const isConfigured = repoId && categoryId;
+---
+
+{isConfigured ? (
+  <script
+    src="https://giscus.app/client.js"
+    data-repo={repo}
+    data-repo-id={repoId}
+    data-category={category}
+    data-category-id={categoryId}
+    data-mapping={mapping}
+    data-strict="0"
+    data-reactions-enabled={reactionsEnabled}
+    data-emit-metadata="0"
+    data-input-position={inputPosition}
+    data-theme={theme}
+    data-lang={lang}
+    crossorigin="anonymous"
+    async
+  />
+) : (
+  <p class="text-sm text-[var(--color-paper-dim)]">
+    <!-- Comments will appear here once Giscus is configured. See src/site.config.ts -->
+  </p>
+)}
