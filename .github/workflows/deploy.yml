@@ -3,7 +3,14 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [master]
+  # Periodically rebuild to pull in content changes from GitHub Issues
+  # in the PaimonLumine/blog repo. Runs every hour.
+  schedule:
+    - cron: '0 * * * *'
+  # Allow manual trigger and cross-repo dispatch (from PaimonLumine/blog)
   workflow_dispatch:
+  repository_dispatch:
+    types: [content-updated]
 
 permissions:
   contents: read
